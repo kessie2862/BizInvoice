@@ -7,9 +7,13 @@ export async function createAction(formData: FormData) {
   const value = Math.floor(parseFloat(String(formData.get('value'))));
   const description = formData.get('description') as string;
 
-  await db.insert(Invoices).values({
-    value,
-    description,
-    status: 'open',
-  });
+  // Insert the new invoice into the database
+  const results = await db
+    .insert(Invoices)
+    .values({
+      value,
+      description,
+      status: 'open',
+    })
+    .returning({ id: Invoices.id });
 }
